@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Проект</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="../@lib/core.css">
+    <link rel="stylesheet" href="../@lib/theme.css">
+    <link rel="stylesheet" href="index.css">
+    <style>
+    </style>
+</head>
+<body class="white">
+<div class="reveal">
+    <div class="slides">
+
+        <section class="center">
+            <h1>Архитектура проекта</h1>
+        </section>
+
+        <section>
+            <h2>Технологии</h2>
+            <ul>
+                <li class="fragment"><a target="_blank" href="https://reactjs.org">React</a> + <a target="_blank" href="https://nextjs.org">next.js</a></li>
+                <li class="fragment"><a target="_blank" href="https://react-redux.js.org">Redux</a></li>
+                <li class="fragment"><a target="_blank" href="https://material-ui.com/">Material UI</a></li>
+                <li class="fragment"><a target="_blank" href="https://sass-lang.com">Saas</a></li>
+                <li class="fragment"><a target="_blank" href="https://github.com/matthew-andrews/isomorphic-fetch">isomorphic-fetch</a></li>
+                <li class="fragment"><a target="_blank" href="https://expressjs.com">express</a></li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Страницы</h2>
+            <ul>
+                <li class="fragment"><a target="_blank" href="http://localhost:3000/">/</a> – Выбор источника данных</li>
+                <li class="fragment"><a target="_blank" href="http://localhost:3000/csv-config">/csv-config</a> – Настройка источника данных</li>
+                <li class="fragment"><a target="_blank" href="http://localhost:3000/tasks">/tasks</a> – Выбор задач</li>
+                <li class="fragment"><a target="_blank" href="http://localhost:3000/print">/print</a> - Страница для печати</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Как добавить источник данных?</h2>
+            <div class="fragment">
+                <div>1. Добавить пункт в <a target="_blank" hre="https://github.com/stickeropis/stickeropis/blob/fbacd186ee01b2c610c96ecfa38d80716209fa4f/components/menu/index.js#L15">меню</a> выбора источника</div>
+                <pre><code data-noescape data-trim>
+                    export default class Menu extends React.Component {
+                        render() {
+                            const items = ['csv'];
+
+                            return (
+                                &lt;List className={b()}&gt;
+                                    {items.map(item => {
+                                        return ...;
+                                    })}
+                                &lt;/List&gt;
+                            );
+                        }
+                    }
+                </code></pre>
+            </div>
+        </section>
+
+        <section>
+                <h2>Как добавить источник данных?</h2>
+                <div>
+                    <div>1. Добавить пункт в <a target="_blank" hre="https://github.com/stickeropis/stickeropis/blob/fbacd186ee01b2c610c96ecfa38d80716209fa4f/components/menu/index.js#L15">меню</a> выбора источника</div>
+                    <pre><code data-noescape data-trim>
+                        export default class Menu extends React.Component {
+                            render() {
+                                const items = ['csv', <mark>'trello'</mark>];
+
+                                return (
+                                    &lt;List className={b()}&gt;
+                                        {items.map(item => {
+                                            return ...;
+                                        })}
+                                    &lt;/List&gt;
+                                );
+                            }
+                        }
+                    </code></pre>
+                </div>
+            </section>
+
+            <section>
+                    <h2>Как добавить источник данных?</h2>
+                    <div>
+                        <div>2. Добавить страницу настройки в <a target="_blank" hre="https://github.com/stickeropis/stickeropis/tree/fbacd186ee01b2c610c96ecfa38d80716209fa4f/pages">/pages</a></div>
+                        <img src="images/pages-initial.jpg" style="margin-top: 50px;">
+                    </div>
+            </section>
+
+            <section>
+                    <h2>Как добавить источник данных?</h2>
+                    <div>
+                        <div>2. Добавить страницу настройки в <a target="_blank" hre="https://github.com/stickeropis/stickeropis/tree/fbacd186ee01b2c610c96ecfa38d80716209fa4f/pages">/pages</a></div>
+                        <img src="images/pages-trello.jpg" style="margin-top: 48px; margin-left: -1px;">
+                    </div>
+            </section>
+
+            <section>
+                    <h2>Как добавить источник данных?</h2>
+                    <div>
+                        <div>3. На сервере в <a target="_blank" href="https://github.com/stickeropis/stickeropis/blob/fbacd186ee01b2c610c96ecfa38d80716209fa4f/server/routers/api.js">роутере API</a> добавить контроллер получения задач</a></div>
+                        <div class="fragment">
+                            <pre><code data-trim data-noescape="">
+                                const trello = require('server/controllers/trello');
+
+                                const router = require('express').Router();
+
+                                module.exports = (app, server) => {
+                                    <mark>router</mark>
+                                        <mark>.route('/trello/tasks')</mark>
+                                        <mark>.get(trello.tasks);</mark>
+
+                                    server.use('/api', router);
+                                };
+                            </code></pre>
+                        </div>
+                    </div>
+            </section>
+
+            <section>
+                    <h2>Как добавить источник данных?</h2>
+                    <div>
+                        <div>4. На странице настройки сделать получение списка задач</a></div>
+                        <div class="fragment" style="margin-top: 50px;">
+                            <pre style="margin-top: 50px;"><code data-noescape data-trim>
+                                import fetch from 'isomorphic-fetch';
+
+                                ...
+
+                                onSubmit = () => {
+                                    <mark>fetch('/api/trello/tasks')</mark>
+                                }
+                            </code></pre>
+                        </div>
+                    </div>
+            </section>
+
+            <section>
+                    <h2>Как добавить источник данных?</h2>
+                    <div>
+                        <div>
+                            5. Привести задачи в общий формат и <a target="_blank" href="https://github.com/stickeropis/stickeropis/blob/fbacd186ee01b2c610c96ecfa38d80716209fa4f/pages/csv-config/index.js#L44">положить</a> в redux-хранилище
+                            <pre class="fragment" style="margin-top: 50px;"><code data-noescape data-trim>
+                                onSubmit = () => {
+                                    fetch('/api/trello/tasks')
+                                        .then(data => <mark>buildTasks(data)</mark>)
+                                        .then(tasks => <mark>this.props.storeTasks(tasks)</mark>);
+                                }
+                            </code></pre>
+                        </div>
+                    </div>
+            </section>
+
+            <section>
+                    <h2>Как разрабатывать остальные страницы?</h2>
+                    <div class="fragment">
+                        Ссылки на блоки страниц:
+                        <ul style="margin-top: 30px;">
+                            <li><a target="_blank" href="https://github.com/stickeropis/stickeropis/tree/fbacd186ee01b2c610c96ecfa38d80716209fa4f/pages/index">Выбор источника данных</a></li>
+                            <li><a target="_blank" href="https://github.com/stickeropis/stickeropis/tree/fbacd186ee01b2c610c96ecfa38d80716209fa4f/pages/tasks">Выбор задач</a></li>
+                            <li><a target="_blank" href="https://github.com/stickeropis/stickeropis/tree/fbacd186ee01b2c610c96ecfa38d80716209fa4f/pages/print">Страница для печати</a></li>
+                        </ul>
+                    </div>
+            </section>
+    </div>
+</div>
+
+<script src="../@lib/core.js"></script>
+</body>
+</html>
