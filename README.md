@@ -1,4 +1,5 @@
 # Слайды документации
 
-[Архитектура проекта](https://stickeropis.github.io/slides/project/)
+ * [О проекте](https://stickeropis.github.io/slides/intro/)
+ * [Архитектура проекта](https://stickeropis.github.io/slides/project/)
 
