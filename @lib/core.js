@@ -30,7 +30,7 @@ Reveal.initialize({
     history: true,
 
     // Vertical centering of slides
-    center: false,
+    center: true,
 
     // Flags if we should show a help overlay when the questionmark
     // key is pressed
